@@ -21,16 +21,5 @@
 </div>
 {% empty %}
     <p> There are no comments yet.</p>
-{% endor %}
-
-{% if new_comment %}
-    <h2> Your comments has been added.</h2>
-{% else %}
-    <h2> Add a new comment </h2>
-    <form action="." method="post">
-        {{ comment_form.as_p}}
-        {%crsf_token%}
-        <p><input type="submit" value="Add commnet"></p>
-    </form>
-{% endif %}
+{% endfor %}
 {% endblock %}

@@ -3,6 +3,7 @@ from posts.models import Post
 from django.views import View
 from posts.forms import PostForm, SearchForm
 from comments.forms import CommentForm
+from posts.utils import *
 
 
 def posts_list_view(request):
@@ -37,48 +38,18 @@ def post_detail_view(request, id):
                                                               'comment_form': comment_form})
 
 
-class PostCreateView(View):
-    # дали инфу
-    def get(self, request):
-        form = PostForm()
-        return render(request, 'posts/post_create.html', context={'form': form})
-
-    # принял инфу
-    def post(self, request):
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save()
-            return redirect(post)
-        return render(request, 'posts/post_create.html', context={'form': form})
+class PostCreateView(View, ObjectCreateMixin):
+    form = PostForm
+    template = 'posts/post_create.html'
 
 
-class PostUpdateView(View):
-
-    def get(self, request, id):
-        post = get_object_or_404(Post, id=id)
-        bound_form = PostForm(instance=post)
-        return render(request, 'posts/post_update.html', context={'form': bound_form,
-                                                                  'post': post})
-
-    def post(self, request, id):
-        post = get_object_or_404(Post, id=id)
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save()
-            return redirect(post)
-        return render(request, 'posts/post_update.html', context={'form': form,
-                                                                  'post': post})
+class PostUpdateView(View, ObjectUpdateMixin):
+    obj_class = Post
+    template = 'posts/post_update.html'
+    bound_form = PostForm
 
 
-class PostDeleteView(View):
-
-    def get(self, request, id):
-        post = get_object_or_404(Post, id=id)
-        return render(request, 'posts/post_delete.html', context={'post': post})
-
-    def post(self, request, id):
-        post = get_object_or_404(Post, id=id)
-        post.delete()
-        return redirect(reverse('post_list_url'))
-
-
+class PostDeleteView(View, ObjectDeleteMixin):
+    obj_class = Post
+    template = 'posts/post_delete.html'
+    list_url = 'post_list_url'
