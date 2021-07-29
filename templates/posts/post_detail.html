@@ -8,6 +8,10 @@
 
     <h2>{{post.title}}</h2>
     <div>{{post.body}}</div>
+    {% if request.user.is_authenticated and not request.user.role == 'ordinary'%}
+    <a href="{{ post.get_update_url}}" class="btn btn-primary">Редактировать</a>
+    <a href="{{ post.get_delete_url}}" class="btn btn-danger">Удалить</a>
+    {% endif %}
 
 {% with comments.count as total_comments %}
         <h2>{{ total_comments }} comment {{ total_comments|pluralize }}</h2>
