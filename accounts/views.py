@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.views import View
 from accounts.forms import LoginForm, RegisterForm
-from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth import authenticate, login, get_user_model, logout
 
 
 class LoginView(View):
@@ -32,7 +32,6 @@ class RegisterView(View):
         register_form = RegisterForm()
         return render(request, 'accounts/register.html', context={'register_form': register_form})
 
-
     def post(self, request):
         bound_form = LoginForm(request.POST)
         User = get_user_model()
@@ -47,4 +46,6 @@ class RegisterView(View):
         return render(request, 'accounts/register.html', context={'register_form': bound_form})
 
 
-
+def logout_view(request):
+    logout(request)
+    return redirect(reverse('posts_list_url'))
