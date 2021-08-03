@@ -21,6 +21,10 @@ def posts_list_view(request):
         else:
             posts = Post.objects.all()
 
+        search_param = request.GET.get('search')
+        if search_param:
+            posts = posts.filter(title__icontains=search_param)
+
         page_number = request.GET.get('page', 1)
         paginator = Paginator(posts, 3)
         page = paginator.get_page(page_number)
@@ -35,16 +39,9 @@ def posts_list_view(request):
             previous_url = f'?page={page.number}'
         context = {'page': page,
                    'next_url': next_url,
-                   'previous_url': previous_url}
+                   'previous_url': previous_url,
+                   'posts':posts}
         return render(request, 'posts/index.html', context=context)
-
-    elif request.method == 'POST':
-        search_form = SearchForm(request.POST)
-
-        if search_form.is_valid():
-            search_param = search_form.cleaned_data.get('search_param')
-            filtered_post = Post.objects.filter(title__icontains=search_param)
-            return render(request, 'posts/index.html', context={'posts': filtered_post})
 
 
 def post_detail_view(request, id):

@@ -16,11 +16,8 @@
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand">News</a>
-        <form action="{% url 'posts_list_url' %}" class="d-flex" method="post">
-            {% csrf_token %}
-            {% for field in search_form%}
-                {{ field }}
-            {% endfor %}
+        <form action="{% url 'posts_list_url' %}" class="d-flex">
+             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       </div>

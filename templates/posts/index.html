@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block content %}
-        {% if posts.count == 0%}
-         <a href="{% url 'post_create_url' %}" class="btn btn-primary">Create post</a>
-        {% endif %}
+    {% if posts.count == 0%}
+     <a href="{% url 'post_create_url' %}" class="btn btn-primary">Create post</a>
+    {% endif %}
     {% for post in page.object_list %}
         <div class="card mb-5">
             <div class="card-header">
