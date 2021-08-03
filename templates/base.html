@@ -16,7 +16,7 @@
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand">News</a>
-        <form action="{% url 'post_list_url' %}" class="d-flex" method="post">
+        <form action="{% url 'posts_list_url' %}" class="d-flex" method="post">
             {% csrf_token %}
             {% for field in search_form%}
                 {{ field }}

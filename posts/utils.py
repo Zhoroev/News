@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 class ObjectCreateMixin:
     form = None
     template = None
+    has_author = False
 
     def get(self, request):
         form = self.form()

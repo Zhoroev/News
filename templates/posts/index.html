@@ -5,7 +5,10 @@
 {% endblock %}
 
 {% block content %}
-    {% for post in posts %}
+        {% if posts.count == 0%}
+         <a href="{% url 'post_create_url' %}" class="btn btn-primary">Create post</a>
+        {% endif %}
+    {% for post in page.object_list %}
         <div class="card mb-5">
             <div class="card-header">
                 <h1>{{post.title}}</h1>
@@ -17,4 +20,25 @@
         </div>
     </div>
     {% endfor %}
+    {% if page.has_other_pages %}
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item {% if not page.has_previous %} disabled {% endif %}"><a class="page-link" href="{{previous_url}}" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+        {% for i in page.paginator.page_range %}
+         {% if page.number == i %}
+         <li class="page-item active">
+         <a class="page-link" href="?page={{n}}">{{i}}<span class="sr-only"></span></a></li>
+         {% elif i > page.number|add:-3 and i < page.number|add:3 %}
+         <li class="page-item"><a class="page-link" href="?page={{i}}">{{ i }}</a></li>
+         <li class="page-item">
+         {% endif %}
+         {% endfor %}
+          <li class="page-item {% if not page.has_next %} disabled {% endif %}">
+          <a class="page-link" href="{{next_url}}">Next</a>
+
+        </li>
+      </ul>
+    </nav>
+    {% endif %}
 {% endblock %}
