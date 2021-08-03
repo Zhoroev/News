@@ -4,11 +4,19 @@ from django.views import View
 from posts.forms import PostForm, SearchForm
 from comments.forms import CommentForm
 from posts.utils import *
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 def posts_list_view(request):
+    if not request.user.is_authenticated:
+        return redirect(reverse('login_url'))
+
     if request.method == 'GET':
-        posts = Post.objects.all()
+        if request.user.role == User.UserType.ORDINARY:
+            posts = request.user.posts.all
+        else:
+            posts = Post.objects.all()
         return render(request, 'posts/index.html', context={'posts': posts})
     elif request.method == 'POST':
         search_form = SearchForm(request.POST)
@@ -52,4 +60,4 @@ class PostUpdateView(View, ObjectUpdateMixin):
 class PostDeleteView(View, ObjectDeleteMixin):
     obj_class = Post
     template = 'posts/post_delete.html'
-    list_url = 'post_list_url'
+    list_url = 'posts_list_url'
